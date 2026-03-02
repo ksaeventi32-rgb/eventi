@@ -164,6 +164,7 @@ const langToggle = document.getElementById("langToggle");
 const i18nTextNodes = Array.from(document.querySelectorAll("[data-i18n]"));
 const i18nHtmlNodes = Array.from(document.querySelectorAll("[data-i18n-html]"));
 const i18nPlaceholderNodes = Array.from(document.querySelectorAll("[data-i18n-placeholder]"));
+const IS_ANDROID = /Android/i.test(navigator.userAgent || "");
 
 function getSavedLang() {
   try {
@@ -181,43 +182,61 @@ function t(key) {
   return currentDict[key] || TRANSLATIONS.en[key] || key;
 }
 
+function setHtmlSafe(el, value) {
+  const next = String(value ?? "");
+  if (IS_ANDROID) {
+    // Android fallback: avoid potential parser/render issues on dynamic HTML strings.
+    const plain = next.replace(/<[^>]+>/g, "");
+    if (el.textContent !== plain) el.textContent = plain;
+    return;
+  }
+  if (el.innerHTML !== next) el.innerHTML = next;
+}
+
 function applyTranslations() {
-  try {
-    document.title = t("page_title");
-    document.documentElement.lang = currentLang;
-    document.documentElement.dir = currentLang === "ar" ? "rtl" : "ltr";
-    document.body.classList.toggle("is-arabic", currentLang === "ar");
+  document.title = t("page_title");
+  document.documentElement.lang = currentLang;
+  document.documentElement.dir = currentLang === "ar" ? "rtl" : "ltr";
+  document.body.classList.toggle("is-arabic", currentLang === "ar");
 
-    if (langToggle) {
-      langToggle.textContent = t("lang_button");
-    }
+  if (langToggle) {
+    langToggle.textContent = t("lang_button");
+  }
 
-    if (menuToggle) {
-      menuToggle.setAttribute("aria-label", t("menu_toggle_aria"));
-    }
+  if (menuToggle) {
+    menuToggle.setAttribute("aria-label", t("menu_toggle_aria"));
+  }
 
-    i18nTextNodes.forEach((el) => {
+  i18nTextNodes.forEach((el) => {
+    try {
       const key = el.getAttribute("data-i18n");
       const next = t(key);
       if (el.textContent !== next) el.textContent = next;
-    });
+    } catch (error) {
+      console.error("Text translation failed:", error);
+    }
+  });
 
-    i18nHtmlNodes.forEach((el) => {
+  i18nHtmlNodes.forEach((el) => {
+    try {
       const key = el.getAttribute("data-i18n-html");
-      const next = t(key);
-      if (el.innerHTML !== next) el.innerHTML = next;
-    });
+      setHtmlSafe(el, t(key));
+    } catch (error) {
+      console.error("HTML translation failed:", error);
+    }
+  });
 
-    i18nPlaceholderNodes.forEach((el) => {
+  i18nPlaceholderNodes.forEach((el) => {
+    try {
       const key = el.getAttribute("data-i18n-placeholder");
       const next = t(key);
       if (el.getAttribute("placeholder") !== next) {
         el.setAttribute("placeholder", next);
       }
-    });
-  } catch (error) {
-    console.error("Translation render failed:", error);
-  }
+    } catch (error) {
+      console.error("Placeholder translation failed:", error);
+    }
+  });
 }
 
 function toggleLanguage() {
