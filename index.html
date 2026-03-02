@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EVENTI - Your Event Buddy</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Tajawal:wght@400;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container nav-inner">
+    <div class="nav-lang">
+      <button id="langToggle" class="lang-toggle" type="button">AR</button>
+    </div>
+
+    <div class="brand">
+      <img src="assets/Logo-04.png" alt="Eventi Logo" class="logo-img">
+      <div class="logo-text">
+        <div class="logo">EV&#398;NTI</div>
+        <div class="tag" data-i18n="tagline">YOUR EVENT BUDDY</div>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a href="#home" data-i18n="nav_home">HOME</a>
+      <a href="#about" data-i18n="nav_about">ABOUT</a>
+      <a href="#services" data-i18n="nav_services">SERVICES</a>
+      <a href="#contact" data-i18n="nav_contact">CONTACT</a>
+    </nav>
+
+    <div class="nav-actions">
+      <span class="nav-chip nav-chip-status" data-i18n="nav_location">RIYADH, SAUDI ARABIA</span>
+    </div>
+
+    <button class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#home" data-i18n="nav_home">HOME</a>
+    <a href="#about" data-i18n="nav_about">ABOUT</a>
+    <a href="#services" data-i18n="nav_services">SERVICES</a>
+    <a href="#contact" data-i18n="nav_contact">CONTACT</a>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+
+  <div class="container hero-content">
+    <p class="eyebrow" data-i18n="hero_eyebrow">RIYADH - SAUDI ARABIA</p>
+
+    <h1 class="hero-title">
+      <span class="hero-title-main">EV&#398;NTI</span>
+    </h1>
+
+    <p class="hero-sub" data-i18n="hero_sub">YOUR EVENT BUDDY</p>
+
+    <p class="hero-desc" data-i18n="hero_desc">
+      Elevating every occasion with exceptional talent, flawless execution,
+      and unwavering commitment to excellence.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn btn-solid blob-btn" href="#contact" data-i18n="hero_contact_btn">GET IN TOUCH</a>
+      <a class="btn btn-outline blob-btn" href="#services" data-i18n="hero_services_btn">OUR SERVICES</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark" id="about">
+  <div class="container about-grid">
+    <div>
+      <p class="mini-title" data-i18n="about_mini">WHO WE ARE</p>
+      <h2 class="section-title" data-i18n-html="about_title">ABOUT <span>US</span></h2>
+
+      <p class="lead" data-i18n="about_p1">
+        At Eventi, we believe that every event tells a unique story. As a premier event management company,
+        we specialize in turning your visions into unforgettable experiences.
+      </p>
+
+      <p class="lead" data-i18n="about_p2">
+        We work closely with our clients to understand their goals, tailoring each event to reflect their identity.
+        At Eventi, we don't just plan events; we create memories.
+      </p>
+    </div>
+
+    <div class="highlight-box">
+      <h3 data-i18n="about_why_title">WHY CHOOSE EVENTI?</h3>
+      <ul>
+        <li data-i18n="about_b1">Commitment to excellence</li>
+        <li data-i18n="about_b2">Professional execution</li>
+        <li data-i18n="about_b3">Attention to detail</li>
+        <li data-i18n="about_b4">Fast response time</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section section-light" id="clients">
+  <div class="container">
+    <p class="mini-title center" data-i18n="clients_mini">OUR CLIENTS</p>
+    <h2 class="section-title center" data-i18n-html="clients_title">TRUSTED BY <span>BRANDS</span></h2>
+
+    <div class="clients-grid">
+      <img src="assets/client-black.png" alt="Black logo">
+      <figure class="client-item">
+        <img src="assets/client-balich.png" alt="Balich Wonder Studio logo">
+        <figcaption class="client-name">BalichWonderStudio</figcaption>
+      </figure>
+      <img src="assets/client-sela.png" alt="Sela logo">
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark" id="services">
+  <div class="container">
+    <p class="mini-title center" data-i18n="services_mini">OUR SERVICES</p>
+    <h2 class="section-title center" data-i18n-html="services_title">WHAT WE <span>DO</span></h2>
+    <p class="section-sub center" data-i18n="services_sub">
+      Comprehensive event solutions tailored to your needs - from setup to final breakdown.
+    </p>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-num">01</div>
+        <h3 data-i18n="service_1_title">EVENT STAFFING</h3>
+        <div class="card-line"></div>
+        <p data-i18n="service_1_text">Professional personnel for various event roles - from corporate functions to luxury galas.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-num">02</div>
+        <h3 data-i18n="service_2_title">LABORS</h3>
+        <div class="card-line"></div>
+        <p data-i18n="service_2_text">Skilled workers to support event operations including setup, logistics, and load-in/out.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-num">03</div>
+        <h3 data-i18n="service_3_title">CLEANING SERVICES</h3>
+        <div class="card-line"></div>
+        <p data-i18n="service_3_text">Thorough and efficient cleaning before, during, and after every event.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-num">04</div>
+        <h3 data-i18n="service_4_title">USHERS</h3>
+        <div class="card-line"></div>
+        <p data-i18n="service_4_text">Courteous and effective guidance for guests - elegantly presented and professionally trained.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark" id="values">
+  <div class="container">
+    <p class="mini-title center" data-i18n="values_mini">OUR FOUNDATION</p>
+    <h2 class="section-title center" data-i18n-html="values_title">OUR <span>VALUES</span></h2>
+
+    <div class="cards-grid three">
+      <div class="card">
+        <div class="badge"></div>
+        <h3 data-i18n="value_1_title">COMMITMENT</h3>
+        <div class="card-line"></div>
+        <p data-i18n="value_1_text">We invest the effort, time, and resources needed to ensure every detail is executed flawlessly.</p>
+      </div>
+
+      <div class="card">
+        <div class="badge"></div>
+        <h3 data-i18n="value_2_title">PROFESSIONALISM</h3>
+        <div class="card-line"></div>
+        <p data-i18n="value_2_text">We maintain the highest levels of professionalism with integrity, transparency, and respect.</p>
+      </div>
+
+      <div class="card">
+        <div class="badge"></div>
+        <h3 data-i18n="value_3_title">QUALITY</h3>
+        <div class="card-line"></div>
+        <p data-i18n="value_3_text">Quality is at the heart of everything we do - no detail is too small.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark" id="contact">
+  <div class="container contact-grid">
+    <div class="contact-left">
+      <p class="mini-title" data-i18n="contact_mini">CONTACT</p>
+      <h2 class="section-title" data-i18n-html="contact_title">LET'S <span>TALK</span></h2>
+
+      <p class="lead" data-i18n="contact_lead">
+        Have a question, a brilliant idea, or just want to say hi? We're all ears.
+      </p>
+
+      <div class="contact-info">
+        <div class="info-row">
+          <span class="info-label" data-i18n="contact_location_label">Location</span>
+          <span class="info-value" data-i18n="contact_location_value">Saudi Arabia, Riyadh</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label" data-i18n="contact_email_label">Email</span>
+          <span class="info-value">info@eventiksa.com</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label" data-i18n="contact_phone_label">Phone</span>
+          <span class="info-value">+966 556 212 771</span>
+        </div>
+      </div>
+
+      <div class="quote-box">
+        <span data-i18n="contact_quote">"Whether you're a potential partner, or just someone with a spark of inspiration, we'd love to hear from you."</span>
+        <div class="quote-author" data-i18n="contact_quote_author">- EVENTI TEAM</div>
+      </div>
+    </div>
+
+    <form id="contactForm" class="contact-form">
+      <div class="two">
+        <div>
+          <label data-i18n="form_name_label">NAME *</label>
+          <input type="text" name="name" placeholder="Your full name" data-i18n-placeholder="form_name_placeholder" required>
+        </div>
+        <div>
+          <label data-i18n="form_phone_label">PHONE</label>
+          <input type="text" name="phone" placeholder="+966 XXX XXXX" data-i18n-placeholder="form_phone_placeholder">
+        </div>
+      </div>
+
+      <div>
+        <label data-i18n="form_email_label">EMAIL</label>
+        <input type="email" name="email" placeholder="your@email.com" data-i18n-placeholder="form_email_placeholder" required>
+      </div>
+
+      <div>
+        <label data-i18n="form_message_label">MESSAGE *</label>
+        <textarea name="message" placeholder="Tell us about your event..." data-i18n-placeholder="form_message_placeholder" required></textarea>
+      </div>
+
+      <div class="hp-field" aria-hidden="true">
+        <label for="website">Website</label>
+        <input id="website" type="text" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
+      <button id="submitBtn" type="submit" class="btn btn-solid full" data-i18n="form_submit">SEND MESSAGE</button>
+      <p id="formStatus" class="status"></p>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span data-i18n="footer_copy">&copy; 2026 EVENTI. All rights reserved.</span>
+
+    <div class="social-icons">
+      <a href="https://www.linkedin.com/company/eventi-kas/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <img src="assets/social-linkedin.png" alt="LinkedIn" class="social-logo">
+      </a>
+      <a href="https://x.com/yourcompany" target="_blank" rel="noopener noreferrer" aria-label="X">
+        <img src="assets/social-x.png" alt="X" class="social-logo">
+      </a>
+      <a href="https://www.instagram.com/yourcompany" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <img src="assets/social-instagram.png" alt="Instagram" class="social-logo">
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
