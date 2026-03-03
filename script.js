@@ -1,7 +1,13 @@
 const EMAILJS_CONFIG = {
   publicKey: "MB_38F98BgPeGvf6-",
   serviceId: "service_rtliwtq",
-  templateId: "template_bgsn3gt"
+  templateId: "template_bgsn3gt",
+  captcha: {
+    provider: "turnstile",
+    siteKey: "",
+    strict: false
+  },
+  minSubmitIntervalMs: 45000
 };
 
 const TRANSLATIONS = {
@@ -164,7 +170,13 @@ const langToggle = document.getElementById("langToggle");
 const i18nTextNodes = Array.from(document.querySelectorAll("[data-i18n]"));
 const i18nHtmlNodes = Array.from(document.querySelectorAll("[data-i18n-html]"));
 const i18nPlaceholderNodes = Array.from(document.querySelectorAll("[data-i18n-placeholder]"));
+const captchaContainer = document.getElementById("captchaContainer");
+const captchaTokenInput = document.getElementById("cfTurnstileToken");
 const IS_ANDROID = /Android/i.test(navigator.userAgent || "");
+const SUBMIT_TS_KEY = "eventi_last_submit_ts";
+let captchaWidgetId = null;
+let captchaReady = false;
+let captchaLoadFailed = false;
 
 function getSavedLang() {
   try {
@@ -293,6 +305,120 @@ function isBotLikeSubmission(formEl) {
   return hasTrapValue || submittedTooFast;
 }
 
+function shouldUseCaptcha() {
+  return Boolean(EMAILJS_CONFIG.captcha && EMAILJS_CONFIG.captcha.siteKey);
+}
+
+function loadScriptOnce(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      if (existing.dataset.loaded === "true") {
+        resolve();
+      } else {
+        existing.addEventListener("load", () => resolve(), { once: true });
+        existing.addEventListener("error", () => reject(new Error("Script failed to load")), { once: true });
+      }
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      script.dataset.loaded = "true";
+      resolve();
+    };
+    script.onerror = () => reject(new Error("Script failed to load"));
+    document.head.appendChild(script);
+  });
+}
+
+function initCaptcha() {
+  if (!shouldUseCaptcha()) return;
+  if (!captchaContainer) return;
+
+  captchaContainer.classList.add("is-visible");
+
+  const provider = EMAILJS_CONFIG.captcha.provider;
+  if (provider !== "turnstile") return;
+
+  const turnstileSrc = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+
+  const renderWidget = () => {
+    if (!window.turnstile) {
+      captchaLoadFailed = true;
+      return;
+    }
+    if (captchaWidgetId !== null) return;
+
+    captchaWidgetId = window.turnstile.render("#turnstileWidget", {
+      sitekey: EMAILJS_CONFIG.captcha.siteKey,
+      theme: "dark",
+      callback: function (token) {
+        captchaReady = true;
+        if (captchaTokenInput) captchaTokenInput.value = token || "";
+      },
+      "error-callback": function () {
+        captchaLoadFailed = true;
+      },
+      "expired-callback": function () {
+        if (captchaTokenInput) captchaTokenInput.value = "";
+      }
+    });
+    captchaReady = true;
+  };
+
+  loadScriptOnce(turnstileSrc)
+    .then(renderWidget)
+    .catch((error) => {
+      captchaLoadFailed = true;
+      console.warn("Captcha script failed to load:", error);
+    });
+}
+
+function getCaptchaToken() {
+  if (!shouldUseCaptcha()) return "";
+  if (EMAILJS_CONFIG.captcha.provider !== "turnstile") return "";
+  if (!window.turnstile || captchaWidgetId === null) return "";
+
+  try {
+    return window.turnstile.getResponse(captchaWidgetId) || "";
+  } catch (error) {
+    return "";
+  }
+}
+
+function resetCaptcha() {
+  if (captchaTokenInput) captchaTokenInput.value = "";
+  if (!window.turnstile || captchaWidgetId === null) return;
+  try {
+    window.turnstile.reset(captchaWidgetId);
+  } catch (error) {
+    console.warn("Captcha reset skipped:", error);
+  }
+}
+
+function isRateLimited() {
+  const minInterval = Number(EMAILJS_CONFIG.minSubmitIntervalMs || 0);
+  if (!minInterval) return false;
+  try {
+    const lastTs = Number(localStorage.getItem(SUBMIT_TS_KEY) || 0);
+    return Date.now() - lastTs < minInterval;
+  } catch (error) {
+    return false;
+  }
+}
+
+function markSubmissionTime() {
+  try {
+    localStorage.setItem(SUBMIT_TS_KEY, String(Date.now()));
+  } catch (error) {
+    // no-op when storage is unavailable
+  }
+}
+
 (function initEmailJS() {
   if (typeof emailjs !== "undefined") {
     try {
@@ -305,6 +431,8 @@ function isBotLikeSubmission(formEl) {
     console.error("EmailJS library not loaded! Check your internet connection.");
   }
 })();
+
+initCaptcha();
 
 if (langToggle) {
   langToggle.addEventListener("click", toggleLanguage);
@@ -328,6 +456,24 @@ if (form) {
     if (!name) return setStatus(t("status_name_required"), "error");
     if (!email || !isValidEmail(email)) return setStatus(t("status_email_invalid"), "error");
     if (!message) return setStatus(t("status_message_required"), "error");
+    if (isRateLimited()) return setStatus("Please wait a moment before sending another message.", "error");
+
+    if (shouldUseCaptcha()) {
+      const token = getCaptchaToken();
+      const strict = Boolean(EMAILJS_CONFIG.captcha && EMAILJS_CONFIG.captcha.strict);
+
+      if (!token && strict) {
+        setStatus("Please complete the verification and try again.", "error");
+        return;
+      }
+
+      // Safe mode: do not block users if captcha provider is unavailable.
+      if (!token && captchaLoadFailed && !strict) {
+        console.warn("Captcha unavailable; continuing in safe mode.");
+      }
+
+      if (captchaTokenInput) captchaTokenInput.value = token;
+    }
 
     setStatus(t("status_sending"), "");
     setLoading(true);
@@ -342,12 +488,15 @@ if (form) {
       .sendForm(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, this)
       .then(() => {
         setStatus(t("status_success"), "success");
+        markSubmissionTime();
         form.reset();
+        resetCaptcha();
         setLoading(false);
       })
       .catch((error) => {
         console.error("EmailJS send error:", error);
         setStatus(t("status_failed"), "error");
+        resetCaptcha();
         setLoading(false);
       });
   });

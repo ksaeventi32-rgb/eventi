@@ -640,6 +640,15 @@ body.is-lang-switching *::after{
   min-height: 20px;
 }
 
+.captcha-wrap{
+  margin-top: 12px;
+  display: none;
+}
+
+.captcha-wrap.is-visible{
+  display: block;
+}
+
 .hp-field{
   position: absolute;
   left: -9999px;
