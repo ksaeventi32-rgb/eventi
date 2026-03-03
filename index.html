@@ -50,6 +50,9 @@
     <a href="#services" data-i18n="nav_services">SERVICES</a>
     <a href="#contact" data-i18n="nav_contact">CONTACT</a>
   </div>
+  <div class="scroll-progress" aria-hidden="true">
+    <span id="scrollProgressBar"></span>
+  </div>
 </header>
 
 <section class="hero" id="home">
@@ -264,17 +267,20 @@
       <a href="https://www.linkedin.com/company/eventi-kas/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
         <img src="assets/social-linkedin.png" alt="LinkedIn" class="social-logo">
       </a>
-      <a href="https://x.com/yourcompany" target="_blank" rel="noopener noreferrer" aria-label="X">
+      <span class="social-static" aria-label="X logo">
         <img src="assets/social-x.png" alt="X" class="social-logo">
-      </a>
-      <a href="https://www.instagram.com/yourcompany" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+      </span>
+      <span class="social-static" aria-label="Instagram logo">
         <img src="assets/social-instagram.png" alt="Instagram" class="social-logo">
-      </a>
+      </span>
     </div>
   </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="script.js"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="react-enhancements.js"></script>
 </body>
 </html>
